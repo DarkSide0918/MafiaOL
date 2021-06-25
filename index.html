@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+
+		<title> MafiaOL </title>
+
+		<!-- Importing Fonts -->
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100&display=swap">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300&display=swap">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+
+		<!-- Importing Stylesheets --> 
+		<link rel="stylesheet" href="src/stylesheets/room.css">
+		<link rel="stylesheet" href="src/stylesheets/fonts.css">
+		<link rel="stylesheet" href="src/stylesheets/master.css">
+		<link rel="stylesheet" href="src/stylesheets/room-list.css">
+		<link rel="stylesheet" href="src/stylesheets/introduction.css">
+
+		<link rel="fonts" href="assets/fonts/BlenderPro-Heavy.otf">
+
+	</head>
+
+	<body>
+
+		<!-- Importing Firebase Scripts -->
+
+		<!-- The core Firebase JS SDK is always required and must be listed first -->
+		<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"> </script>
+
+		<!-- Include Firebase Database -->
+		<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"> </script>
+		<!-- Include Firebase Authentication -->
+		<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"> </script>
+		<!-- Include Firebase Analytics -->
+		<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"> </script>
+
+		<script src="src/scripts/firebase.js"> </script>
+
+		<!-- Importing Before Load Scripts -->
+		<script src="src/scripts/start.js"> </script>
+		<script src="src/scripts/title.js"> </script>
+		<script src="src/scripts/scene-manager.js"> </script>
+		<script src="src/scripts/authentication.js"> </script>
+		<script src="src/scripts/account.js"> </script>
+		<script src="src/scripts/room-manager.js"> </script>
+
+		<div id="master-navigation-bar">
+
+			<div id="master-logo-container">
+
+				<h1 id="master-logo"> MafiaOL </h1>
+
+			</div>
+
+			<div id="master-navigation-buttons-container" hidden>
+
+				<button class="tab-button" onclick="switchScenes('home')"> Home </button>
+				<button class="tab-button" onclick="switchScenes('store')"> Store </button>
+				<button class="tab-button" onclick="switchScenes('social')"> Social </button>
+				<button class="tab-button" onclick="switchScenes('account')"> Account </button>
+				<button class="tab-button" onclick="switchScenes('settings')"> Settings </button>
+
+			</div>
+
+		</div>
+
+		<div id="introduction-scene">
+
+			<div id="title">
+
+				<h1 class="title-text" id="title-line-1"> Mafia Online. </h1> 
+				<h1 class="title-text" id="title-line-2" hidden> The Second Generation. </h1>
+
+			</div>
+
+			<center> 
+
+				<button id="title-redirection-button" onclick="switchScenes('authentication')"> Enter > </button> 
+
+			</center>
+
+			<div id="introduction-footer">
+
+				<div id="introduction-footer-spacer"> </div>
+
+				<p id="display-warning-text"> 
+					This software is made for 16:9 display ratios, 
+					other display ratios might experience graphical gliches and/or inaccuracies.
+					Full screened FHD (1080p) resolution is recommended for best experience. Press F11 to enter fullscreen mode. 
+				</p>
+
+			</div>
+
+		</div>
+
+		<div id="authentication-scene">
+
+			<div id="authentication-form-container">
+
+				<form onsubmit="return authentication()" autocomplete="off">
+
+					<input id="username-input" placeholder="Username"> </input>
+					<input id="password-input" placeholder="Password"> </input>
+					<input id="account-form-submit-button" type="submit" value="Join"> </input>
+
+				</form>
+
+			</div>
+
+		</div>
+
+		<div id="home-scene">
+
+			<button onclick="switchScenes('room-list'); refreshRoomList()"> Join Room </button>
+			<button onclick="switchScenes('create-room')"> Create Room </button>
+
+		</div>
+
+		<div id="create-room-scene"> 
+
+			<form onsubmit="return createRoom()" autocomplete="off">
+
+				<input type="text" id="room-name-input" placeholder="Room Name">
+
+					<button id="password-toggle-button"> </button>
+
+				<input type="text" id="room-password-input" placeholder="Room Password">
+
+				<input type="submit" value="Create">
+
+			</form>
+
+		</div>
+
+		<div id="room-list-scene" hidden>
+
+			<div id="room-list-navigation-bar">
+
+				
+
+			</div>
+
+			<div id="room-items-container">
+
+
+
+			</div>
+
+		</div>
+
+		<div id="room-scene" hidden>
+			
+			<div id="room-info"> 
+
+				<p id="room-name" class="room-title"> </p>
+				<p id="room-code"> </p>
+
+			</div>
+
+			<div id="room-players">
+
+				<div id="room-connected-players-list-top">
+
+					<div id="room-connected-players-list-top-left"> 
+					</div>
+					<div id="room-connected-players-list-top-middle">
+
+						<p> Connected </p>
+
+					</div>
+					<div id="room-connected-players-list-top-right">
+
+						<button onclick="refreshPlayerList()"> Refresh </button>
+
+					</div>
+
+				</div>
+
+				<div id="room-connected-players-list">
+
+				</div>
+
+			</div>
+
+			<div id="room-footer-buttons"> 
+
+				<button id="leave-room-button"> Leave Room </button>
+				<button id="start-game-button"> Start Game </button>
+				<button id="ready-button"> Ready </button>
+
+			</div>
+
+		</div>
+
+		<div id="store-scene" hidden>
+
+		</div>
+
+		<div id="social-scene" hidden>
+
+		</div>
+
+		<div id="game-scene" hidden>
+
+		</div>
+
+		<div id="account-scene" hidden>
+
+			<p id="account-username-display"> </p>
+			<p id="account-credits-display"> </p>
+			<p id="account-points-display"> </p>
+			<p id="account-title-display"> </p>
+
+			<button onclick="signOutAccount()"> Sign out </button>
+
+		</div>
+
+		<div id="settings-scene" hidden>
+
+		</div>
+
+		<div id="coming-soon-scene" hidden> 
+
+			<p> Coming Soon </p>
+
+		</div>
+
+	</body>
+
+</html>
