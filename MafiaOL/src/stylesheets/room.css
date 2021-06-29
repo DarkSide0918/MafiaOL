@@ -1,0 +1,46 @@
+div#room-info {
+
+	width: 100vw;
+	height: 15vh;
+
+	text-align: center;
+
+}
+
+div#room-players {
+
+	width: 100vw;
+	height: 70vh;
+
+}
+
+div#room-footer-buttons {
+
+	width: 100vw;
+	height: 10vh;
+
+}
+
+div#room-connected-players-list {
+
+	width: 20%;
+	height: 80%;
+
+	border: 2px solid black;
+
+}
+
+div#room-connected-players-list-top{
+
+	width: 20%;
+	height: 10%;
+
+	border: 2px solid black;
+
+}
+
+p.room-title {
+
+	font-size: 3vh;
+
+}

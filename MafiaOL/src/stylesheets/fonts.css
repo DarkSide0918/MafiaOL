@@ -1,0 +1,34 @@
+@font-face {
+
+	font-family: 'Blender Pro Thin';
+	src: url('../../assets/fonts/BlenderPro-Thin.ttf');
+
+}
+
+@font-face {
+
+	font-family: 'Blender Pro Medium';
+	src: url('../../assets/fonts/BlenderPro-Medium.otf');
+
+}
+
+@font-face {
+
+	font-family: 'Blender Pro Book';
+	src: url('../../assets/fonts/BlenderPro-Book.otf');
+
+}
+
+@font-face {
+
+	font-family: 'Blender Pro Heavy';
+	src: url('../../assets/fonts/BlenderPro-Heavy.otf');
+
+}
+
+@font-face {
+
+	font-family: 'Digital-7';
+	src: url('../../assets/fonts/Digital-7.ttf');
+
+}
