@@ -10,7 +10,7 @@ function refreshRoomList() {
 
 			var html = "";
 
-			html += "<div class='room-item' id='room-" + roomKeys[i] + "' onclick='loadRoomInformation(`" + roomKeys[i] + "`)'>";
+			html += "<div class='room-item' id='room-" + roomKeys[i] + "' onclick='joinRoom(`" + roomKeys[i] + "`)'>";
 			html += "<div class='room-item-content-container'>";
 			html += "<img class='room-item-preview-image'> </img>";
 			html += "<div class='room-title-and-description-container'>";
@@ -34,7 +34,7 @@ function refreshRoomList() {
 
 }
 
-function loadRoomInformation(roomID) {
+function joinRoom(roomID) {
 
 	var roomNameText = "";
 
@@ -46,6 +46,12 @@ function loadRoomInformation(roomID) {
 		myRoomName = snapshot.child("roomName").val();
 
 		document.getElementById("room-name").innerHTML = roomNameText;
+
+		firebase.database().ref("rooms/" + myRoomName + "/connected").update({
+
+			[userName]: false
+
+		});
 
 		refreshPlayerList();
 
@@ -79,6 +85,8 @@ function createRoom() {
 
 				});
 
+				joinRoom(roomName);
+
 			}
 
 		});
@@ -86,6 +94,14 @@ function createRoom() {
 	}
 
 	return false;
+
+}
+
+function leaveRoom() {
+
+	firebase.database().ref("rooms/" + myRoomName + "/connected/" + userName).remove();
+
+	switchScenes("home");
 
 }
 
@@ -103,7 +119,15 @@ function refreshPlayerList() {
 
 			html += "<div class='player-list-item'>"
 
-			html += "<p> " + playerKeys[i] + " </p>"
+			if (snapshot.child(playerKeys[i]).val()) {
+
+				html += "<p> " + playerKeys[i] + " ✓ </p>"
+
+			} else {
+
+				html += "<p> " + playerKeys[i] + " </p>"
+
+			}
 
 			html += "</div>"
 
@@ -112,5 +136,32 @@ function refreshPlayerList() {
 		}
 
 	});
+
+}
+
+function ready() {
+
+	firebase.database().ref("rooms/" + myRoomName + "/connected/" + userName).once("value", (snapshot) => {
+
+		if (snapshot.val() == true) {
+
+			firebase.database().ref("rooms/" + myRoomName + "/connected").update({
+
+				[userName]: false
+
+			});
+
+		} else {
+
+			firebase.database().ref("rooms/" + myRoomName + "/connected").update({
+
+				[userName]: true
+
+			});
+
+		}
+
+	});
+
 
 }

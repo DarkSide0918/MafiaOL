@@ -52,7 +52,7 @@ function switchScenes(scene) {
 		case "room": 
 
 			document.getElementById("room-scene").hidden = false;
-			document.getElementById("master-navigation-buttons-container").hidden = false;
+			document.getElementById("master-navigation-buttons-container").hidden = true;
 
 		break;
 
