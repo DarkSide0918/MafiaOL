@@ -72,7 +72,7 @@ function createRoom() {
 
 			if (snapshot.exists()) {
 
-				alert("This Room Already Exists");
+				alert("This Room Already Exist.");
 
 				return false;
 
