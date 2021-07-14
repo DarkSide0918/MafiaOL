@@ -1,32 +1,38 @@
 function refreshRoomList() {
 
+	// TODO: Better Database Efficiency (New branch roomlist)
+
 	document.getElementById("room-items-container").innerHTML = "";
 
 	firebase.database().ref("rooms").once("value", function (snapshot) {
 
-		var roomKeys = Object.keys(snapshot.val());
+		if (snapshot.val() != null) {
 
-		for (i = 0; i < roomKeys.length; i++) {
+			var roomKeys = Object.keys(snapshot.val());
 
-			var html = "";
+			for (i = 0; i < roomKeys.length; i++) {
 
-			html += "<div class='room-item' id='room-" + roomKeys[i] + "' onclick='joinRoom(`" + roomKeys[i] + "`)'>";
-			html += "<div class='room-item-content-container'>";
-			html += "<img class='room-item-preview-image'> </img>";
-			html += "<div class='room-title-and-description-container'>";
+				var html = "";
 
-			html += "<p class='room-title-text'> " + snapshot.child(roomKeys[i]).child("roomName").val() + " </p>";
-			html += "<p class='room-description-text'> </p>";
+				html += "<div class='room-item' id='room-" + roomKeys[i] + "' onclick='joinRoom(`" + roomKeys[i] + "`)'>";
+				html += "<div class='room-item-content-container'>";
+				html += "<img class='room-item-preview-image'> </img>";
+				html += "<div class='room-title-and-description-container'>";
 
-			html += "</div>";
+				html += "<p class='room-title-text'> " + snapshot.child(roomKeys[i]).child("roomName").val() + " </p>";
+				html += "<p class='room-description-text'> </p>";
 
-			html += "<p class='game-mode-text'> </p>"
-			html += "<p class='player-count-text'> </p>"
+				html += "</div>";
 
-			html += "</div>";
-			html += "</div>";
+				html += "<p class='game-mode-text'> </p>"
+				html += "<p class='player-count-text'> </p>"
 
-			document.getElementById("room-items-container").innerHTML += html;
+				html += "</div>";
+				html += "</div>";
+
+				document.getElementById("room-items-container").innerHTML += html;
+
+			}
 
 		}
 
@@ -57,6 +63,16 @@ function joinRoom(roomID) {
 
 	});
 
+	firebase.database().ref("rooms/" + roomID + "/started").on("value", (snapshot) => {
+
+		if (snapshot.val()) {
+
+			startGame();
+
+		}
+
+	});
+
 }
 
 function createRoom() {
@@ -81,7 +97,9 @@ function createRoom() {
 				firebase.database().ref("rooms/" + roomName).set({
 
 					"roomName": roomName,
-					"roomPassword": roomPassword
+					"roomPassword": roomPassword,
+					"host": userName,
+					"started": false
 
 				});
 
@@ -99,17 +117,29 @@ function createRoom() {
 
 function leaveRoom() {
 
-	firebase.database().ref("rooms/" + myRoomName + "/connected/" + userName).remove();
+	firebase.database().ref("rooms/" + myRoomName + "/host").once("value", (snapshot) => {
 
-	switchScenes("home");
+		if (snapshot.val() == userName) {
+
+			firebase.database().ref("rooms/" + myRoomName).remove();
+
+		} else {
+
+			firebase.database().ref("rooms/" + myRoomName + "/connected/" + userName).remove();
+
+		}
+
+		switchScenes("home");
+
+	});
 
 }
 
 function refreshPlayerList() {
 
-	document.getElementById("room-connected-players-list").innerHTML = "";
+	firebase.database().ref("rooms/" + myRoomName + "/connected").on("value", (snapshot) => {
 
-	firebase.database().ref("rooms/" + myRoomName + "/connected").once("value", (snapshot) => {
+		document.getElementById("room-connected-players-list").innerHTML = "";
 
 		var playerKeys = Object.keys(snapshot.val());
 
@@ -163,5 +193,17 @@ function ready() {
 
 	});
 
+
+}
+
+function startGame() {
+
+	switchScenes("game");
+
+	// Detach Event Listeners
+	firebase.database().ref("rooms/" + myRoomName + "/connected").off();
+	firebase.database().ref("rooms/" + myRoomName + "/started").off();
+
+	syncGame();
 
 }

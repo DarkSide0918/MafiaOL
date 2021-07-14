@@ -42,6 +42,8 @@ function signOutAccount() {
 	autoLogin = false;
 	firebase.auth().signOut();
 
+	userName = null;
+
 	switchScenes("authentication");
 
 }

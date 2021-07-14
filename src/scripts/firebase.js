@@ -17,3 +17,6 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
+
+// Abbreviation
+const database = firebase.database();
