@@ -1,0 +1,35 @@
+button.owned-chr {
+
+	background-color: aqua;
+
+}
+
+button.owned-chr:hover {
+
+	background-color: aquamarine;
+
+}
+
+button.owned-chr:disabled {
+
+	background-color: aqua;
+
+}
+
+button.other-chr {
+
+	background-color: crimson;
+
+}
+
+button.other-chr:hover {
+
+	background-color: red;
+
+}
+
+button.other-chr:disabled {
+
+	background-color: crimson;
+
+}

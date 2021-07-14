@@ -18,10 +18,13 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
 
-		<!-- Importing Stylesheets --> 
+		<!-- Importing Stylesheets -->
+		<link rel="stylesheet" href="src/stylesheets/home.css">
 		<link rel="stylesheet" href="src/stylesheets/room.css">
+		<link rel="stylesheet" href="src/stylesheets/cards.css">
 		<link rel="stylesheet" href="src/stylesheets/fonts.css">
 		<link rel="stylesheet" href="src/stylesheets/master.css">
+		<link rel="stylesheet" href="src/stylesheets/buttons.css">
 		<link rel="stylesheet" href="src/stylesheets/room-list.css">
 		<link rel="stylesheet" href="src/stylesheets/introduction.css">
 
@@ -51,7 +54,16 @@
 		<script src="src/scripts/scene-manager.js"> </script>
 		<script src="src/scripts/authentication.js"> </script>
 		<script src="src/scripts/account.js"> </script>
+		<script src="src/scripts/game.js"> </script>
 		<script src="src/scripts/room-manager.js"> </script>
+		<script src="src/scripts/room.js"> </script>
+		<script src="src/scripts/store.js"> </script>
+
+		<!-- Import Plugins -->
+		<!-- <script src="src/plugins/anticheat.js"> </script> -->
+
+		<!-- Import Third Party Plugins -->
+		<script src="https://unpkg.com/read-excel-file@4.x/bundle/read-excel-file.min.js"></script>
 
 		<div id="master-navigation-bar">
 
@@ -75,34 +87,43 @@
 
 		<div id="introduction-scene">
 
-			<div id="title">
+			<div id="introduction-container">
 
-				<h1 class="title-text" id="title-line-1"> Mafia Online. </h1> 
-				<h1 class="title-text" id="title-line-2" hidden> The Second Generation. </h1>
+				<div id="title">
 
-			</div>
+					<h1 class="title-text" id="title-line-1"> Mafia Online. </h1>
+					<h1 class="title-text" id="title-line-2" hidden> The Second Generation. </h1>
 
-			<center> 
+					<div id="title-spacer"> </div>
 
-				<button id="title-redirection-button" onclick="switchScenes('authentication')"> Enter > </button> 
+				</div>
 
-			</center>
+				<div id="introduction-button-container"> 
 
-			<div id="introduction-footer">
+					<button class="button-main" id="title-redirection-button" onclick="switchScenes('authentication')">
+						<span class="span-main-line"></span>
+						Enter_
+					</button>
 
-				<div id="introduction-footer-spacer"> </div>
+				</div>
 
-				<p id="display-warning-text"> 
-					This software is made for 16:9 display ratios, 
-					other display ratios might experience graphical gliches and/or inaccuracies.
-					Full screened FHD (1080p) resolution is recommended for best experience. Press F11 to enter fullscreen mode. 
-				</p>
+				<div id="introduction-footer">
+
+					<p id="display-warning-text"> 
+						This software is made for 16:9 display ratios, 
+						other display ratios might experience graphical gliches and/or inaccuracies.
+						Full screened FHD (1080p) resolution is recommended for best experience. Press F11 to enter fullscreen mode. 
+					</p> 
+
+				</div>
 
 			</div>
 
 		</div>
 
-		<div id="authentication-scene">
+		<div id="authentication-scene" hidden>
+
+			<p> Please Identify Yourself </p>
 
 			<div id="authentication-form-container">
 
@@ -118,14 +139,40 @@
 
 		</div>
 
-		<div id="home-scene">
+		<div id="home-scene" hidden>
 
-			<button onclick="switchScenes('room-list'); refreshRoomList()"> Join Room </button>
-			<button onclick="switchScenes('create-room')"> Create Room </button>
+			<div id="home-container">
+
+				<div id="home-left-container">
+
+					<button class="button-main-dark" id="button-join-room" onclick="switchScenes('room-list'); refreshRoomList()">
+						<span class="span-main-line-dark"></span>
+						Join Room_
+					</button>
+					<button class="button-main-dark" id="button-create-room" onclick="switchScenes('create-room')">
+						<span class="span-main-line-dark"></span>
+						Create Room_
+					</button>
+
+				</div>
+
+				<div id="home-middle-container">
+
+
+
+				</div>
+
+				<div id="home-right-container"> 
+
+
+
+				</div>
+
+			</div>
 
 		</div>
 
-		<div id="create-room-scene"> 
+		<div id="create-room-scene" hidden> 
 
 			<form onsubmit="return createRoom()" autocomplete="off">
 
@@ -136,6 +183,8 @@
 				<input type="text" id="room-password-input" placeholder="Room Password">
 
 				<input type="submit" value="Create">
+
+				<p> Note: You will automatically join once you have created the room. </p>
 
 			</form>
 
@@ -193,9 +242,9 @@
 
 			<div id="room-footer-buttons"> 
 
-				<button id="leave-room-button"> Leave Room </button>
-				<button id="start-game-button"> Start Game </button>
-				<button id="ready-button"> Ready </button>
+				<button id="leave-room-button" onclick="leaveRoom()"> Leave Room </button>
+				<button id="start-game-button" onclick="startGame()"> Start Game </button>
+				<button id="ready-button" onclick="ready()"> Ready </button>
 
 			</div>
 
@@ -207,9 +256,23 @@
 
 		<div id="social-scene" hidden>
 
-		</div>
+	  </div>
 
 		<div id="game-scene" hidden>
+
+			<input class="navigation-buttons" type="file" id="input-board-file-upload" accept=".xlsx">
+
+			<div id="div-action-bar">
+
+				<button id="button-select-assassinate" onclick="funcSelectAction('assassinate')" hidden> Assassinate </button>
+				<button id="button-select-hunt" onclick="funcSelectAction('hunt')" hidden> Hunt </button>
+				<button id="button-select-bodyguard" onclick="funcSelectAction('bodyguard')" hidden> Bodyguard </button>
+				<button id="button-select-tend" onclick="funcSelectAction('tend')" hidden> Tend </button>
+				<button id="button-select-message" onclick="funcSelectAction('message')" hidden> Message </button>
+				<button id="button-select-investigate" onclick="funcSelectAction('investigate')" hidden> Investigate </button>
+				<button id="button-select-suicide" onclick="funcSelectAction('suicide')" hidden> Suicide </button>
+
+			</div>
 
 		</div>
 
@@ -233,6 +296,9 @@
 			<p> Coming Soon </p>
 
 		</div>
+
+		<!-- Import After Load Scripts -->
+		<script src="src/scripts/read-board.js"> </script>
 
 	</body>
 

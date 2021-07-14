@@ -1,6 +1,6 @@
 function authentication() {
 
-	var usernameEntered = document.getElementById("username-input").value;
+	var usernameEntered = document.getElementById("username-input").value + "@mafia.online";
 	var passwordEntered = document.getElementById("password-input").value;
 
 	firebase.auth().signInWithEmailAndPassword(usernameEntered, passwordEntered).then(manualLogin = true)
@@ -41,6 +41,8 @@ function signOutAccount() {
 
 	autoLogin = false;
 	firebase.auth().signOut();
+
+	userName = null;
 
 	switchScenes("authentication");
 

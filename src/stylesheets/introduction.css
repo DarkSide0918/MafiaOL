@@ -7,33 +7,39 @@ div#introduction-scene {
 
 	background: black;
 
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+}
+
+div#introduction-button-container {
+
+	height: 20vh;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
 }
 
 div#title {
 
-	margin-left: 10vw;
-	margin-right: 10vw;
-
-	padding-top: 20vh;
-
-	width: 80vw;
-	height: 50vh;
-
-	align-content: center;
+	height: 30vh;
 
 }
 
-div#introduction-footer {
+/* div#introduction-footer {
 
-	height: 20vh;
+	height: 10vh;
 
 }
 
 div#introduction-footer-spacer {
 
-	height: 15vh;
+	height: 10vh;
 
-}
+} */
 
 p#display-warning-text {
 
@@ -48,8 +54,8 @@ h1.title-text {
 	white-space: nowrap;
 
 	color: white; 
-	font-size: 5vw;
-	font-family: 'Blender Pro Heavy', monospace;
+	font-size: 12.5vh;
+	font-family: 'Digital-7', monospace;
 
 }
 
@@ -57,7 +63,7 @@ h1#title-line-1 {
 
 	animation: 1.95s title-line-1-typing steps(13);
 
-	border-right: 2px solid white;
+	border-right: 4px solid white;
 
 	width: 13ch;
 
@@ -68,7 +74,7 @@ h1#title-line-2 {
 
 	animation: 3.3s title-line-2-typing steps(22), 1s cursor-animation 3.3s infinite;
 
-	border-right: 2px solid white;
+	border-right: 4px solid white;
 
 	width: 22ch;
 
@@ -76,18 +82,9 @@ h1#title-line-2 {
 
 p#display-warning-text {
 
-	color: white;
+	color: black;
 	font-size: 1.5vh;
 	font-family: 'Blender Pro Book', sans-serif;
-
-}
-
-button#title-redirection-button {
-
-	width: 12.5vw;
-	height: 5vh;
-
-	font-size: 2vh;
 
 }
 
@@ -130,19 +127,19 @@ button#title-redirection-button {
 
 	0% {
 
-		border-right: 2px solid white;
+		border-right: 4px solid white;
 
 	}
 
 	25% {
 
-		border-right: 2px solid white;
+		border-right: 4px solid white;
 
 	}
 
 	100% {
 
-		border-right: 2px solid transparent;
+		border-right: 4px solid transparent;
 
 	}
 
