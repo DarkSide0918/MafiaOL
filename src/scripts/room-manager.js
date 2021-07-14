@@ -16,7 +16,7 @@ function refreshRoomList() {
 
 				html += "<div class='room-item' id='room-" + roomKeys[i] + "' onclick='joinRoom(`" + roomKeys[i] + "`)'>";
 				html += "<div class='room-item-content-container'>";
-				html += "<img class='room-item-preview-image'> </img>";
+				html += "<img class='room-item-preview-image' src='assets/images/forest1.png'> </img>";
 				html += "<div class='room-title-and-description-container'>";
 
 				html += "<p class='room-title-text'> " + snapshot.child(roomKeys[i]).child("roomName").val() + " </p>";
@@ -58,6 +58,12 @@ function joinRoom(roomID) {
 			[userName]: false
 
 		});
+
+		if (userName == snapshot.child("host").val()) {
+
+			boolIsHost = true;
+
+		}
 
 		refreshPlayerList();
 
@@ -132,6 +138,8 @@ function leaveRoom() {
 		switchScenes("home");
 
 	});
+
+	reset();
 
 }
 

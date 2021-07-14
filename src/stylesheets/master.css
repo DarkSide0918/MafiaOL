@@ -23,11 +23,6 @@ div#master-navigation-bar {
 
 	background-color: rgb(15,15,15);
 
-	color: white;
-	font-family: 'Blender Pro Heavy', sans-serif;
-	font-size: 1.5vh;
-	font-weight: 100;
-
 }
 
 div#master-logo-container {
@@ -59,6 +54,19 @@ h1#master-logo {
 
 	top: 50%;
 	transform: translateY(-50%);
+
+	color: white;
+	font-family: 'Blender Pro Heavy', sans-serif;
+	font-weight: 100;
+
+}
+
+h2#master-sublogo {
+
+	color: white;
+	font-family: 'Blender Pro Book', sans-serif;
+	font-size: 1.25vh;
+	font-weight: 100;
 
 }
 

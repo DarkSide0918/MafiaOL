@@ -37,6 +37,8 @@ function syncGame() {
 
 			firebase.database().ref("rooms/" + myRoomName + "/characters").off();
 
+			funcClickCharacter(0, 0); 
+
 		} else {
 
 			firebase.database().ref("rooms/" + myRoomName + "/characters").off();
@@ -70,6 +72,32 @@ function syncGame() {
 		}
 
 	});
+
+	firebase.database().ref("rooms/" + myRoomName + "/round").on("value", function (snapshot) {
+
+		if (snapshot.val() <= intActionPointCapacity) {
+
+			intActionPointsRemaining = snapshot.val();
+
+		} else {
+
+			intActionPointsRemaining = 10;
+
+		}
+
+	});
+
+	// Check if display host-exclusive buttons
+
+	if (boolIsHost) {
+
+		document.getElementById("input-board-file-upload").hidden = false;
+
+	} else {
+
+		document.getElementById("input-board-file-upload").hidden = true;
+
+	}
 
 }
 

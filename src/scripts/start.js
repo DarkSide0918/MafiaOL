@@ -7,17 +7,20 @@ var userPassword = "";
 var userName = "";
 
 // Cached Local Game Data
-var intActionsRemaining = 0;
+var intActionPointCapacity = 10;
+var intActionPointsRemaining = 0;
 var intActionPhase = 0;
 var strSelectedChr = "";
 var strSelectedAction = "";
 var strSelectedTarget = "";
 
 // Cached Local Misc
+var boolIsHost = false;
 var myRoomName = "";
 
 function reset() {
 
-	myRoomName = null;
+	boolIsHost = false;
+	myRoomName = "";
 
 }

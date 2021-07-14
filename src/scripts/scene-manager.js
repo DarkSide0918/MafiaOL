@@ -1,80 +1,76 @@
 function switchScenes(scene) {
 
-	setTimeout(() => {
+	closeAllScenes();
 
-		closeAllScenes();
+	switch (scene) {
 
-		switch (scene) {
+		case "authentication":
 
-			case "authentication":
+			if (autoLogin) {
 
-				if (autoLogin) {
+				switchScenes("home");
 
-					switchScenes("home");
+			} else {
 
-				} else {
-
-					document.getElementById("authentication-scene").hidden = false;
-					document.getElementById("master-navigation-buttons-container").hidden = true;
-
-				}
-
-			break;
-
-			case "room-list": 
-
-				document.getElementById("room-list-scene").hidden = false;
-				document.getElementById("master-navigation-buttons-container").hidden = false;
-
-			break;
-
-			case "home": 
-
-				document.getElementById("home-scene").hidden = false;
-				document.getElementById("master-navigation-buttons-container").hidden = false;
-
-			break;
-
-			case "account":
-
-				loadAccountInformation();
-
-				document.getElementById("account-scene").hidden = false;
-				document.getElementById("master-navigation-buttons-container").hidden = false;
-
-			break;
-
-			case "create-room":
-
-				document.getElementById("create-room-scene").hidden = false;
-				document.getElementById("master-navigation-buttons-container").hidden = false;
-
-			break;
-
-			case "room": 
-
-				document.getElementById("room-scene").hidden = false;
+				document.getElementById("authentication-scene").hidden = false;
 				document.getElementById("master-navigation-buttons-container").hidden = true;
 
-			break;
+			}
 
-			case "game": 
+		break;
 
-				document.getElementById("game-scene").hidden = false;
-				document.getElementById("master-navigation-buttons-container").hidden = true;
+		case "room-list": 
 
-			break;
+			document.getElementById("room-list-scene").hidden = false;
+			document.getElementById("master-navigation-buttons-container").hidden = false;
 
-			default: 
+		break;
 
-				document.getElementById("coming-soon-scene").hidden = false;
-				document.getElementById("master-navigation-buttons-container").hidden = false;
+		case "home": 
 
-			break;
+			document.getElementById("home-scene").hidden = false;
+			document.getElementById("master-navigation-buttons-container").hidden = false;
 
-		}
+		break;
 
-	}, 250);
+		case "account":
+
+			loadAccountInformation();
+
+			document.getElementById("account-scene").hidden = false;
+			document.getElementById("master-navigation-buttons-container").hidden = false;
+
+		break;
+
+		case "create-room":
+
+			document.getElementById("create-room-scene").hidden = false;
+			document.getElementById("master-navigation-buttons-container").hidden = false;
+
+		break;
+
+		case "room": 
+
+			document.getElementById("room-scene").hidden = false;
+			document.getElementById("master-navigation-buttons-container").hidden = true;
+
+		break;
+
+		case "game": 
+
+			document.getElementById("game-scene").hidden = false;
+			document.getElementById("master-navigation-buttons-container").hidden = true;
+
+		break;
+
+		default: 
+
+			document.getElementById("coming-soon-scene").hidden = false;
+			document.getElementById("master-navigation-buttons-container").hidden = false;
+
+		break;
+
+	}
 
 }
 

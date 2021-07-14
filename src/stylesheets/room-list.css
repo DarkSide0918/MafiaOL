@@ -32,12 +32,12 @@ div.room-item {
 	width: 90vw;
 	height: 10vh;
 
-	background: 
-		linear-gradient(135deg, transparent 2.5vh, rgb(31,31,31) 0) top left,
-		linear-gradient(-45deg, transparent 2.5vh, rgb(31,31,31) 0) bottom right; 
+	background-color: rgb(63, 63, 63); 
 	background-repeat: no-repeat;
 	background-size: 100% 50%;
 
 	transition: 2s;
+
+	clip-path: polygon(2% 0%, 100% 0, 100% 75%, 98% 100%, 0 100%, 0% 25%)
 
 }
