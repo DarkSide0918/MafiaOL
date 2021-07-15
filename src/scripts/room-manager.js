@@ -137,9 +137,9 @@ function leaveRoom() {
 
 		switchScenes("home");
 
-	});
+		reset();
 
-	reset();
+	});
 
 }
 
