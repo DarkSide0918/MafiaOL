@@ -25,11 +25,20 @@ div#master-navigation-bar {
 
 }
 
-div#master-logo-container {
+div#master-title-container {
 
 	float: left;
 
-	width: 10vw;
+	width: 15vh;
+	height: 5vh;
+
+}
+
+div#master-subtitle-container {
+
+	float: left;
+
+	width: 35vh;
 	height: 5vh;
 
 }
@@ -38,7 +47,7 @@ div#master-navigation-buttons-container {
 
 	float: left;
 
-	width: 90vw;
+	width: calc(100vw - 50vh);
 	height: 5vh;
 
 	font-size: 0;
@@ -46,27 +55,27 @@ div#master-navigation-buttons-container {
 
 }
 
-h1#master-logo {
+h1#master-title {
 
-	position: absolute;
-
-	margin-left: 1vw;
-
-	top: 50%;
-	transform: translateY(-50%);
+	margin: 1vh;
+	margin-left: 2.5vh;
 
 	color: white;
 	font-family: 'Blender Pro Heavy', sans-serif;
-	font-weight: 100;
+	font-size: 3vh;
+	line-height: 3vh;
 
 }
 
-h2#master-sublogo {
+h2#master-subtitle {
+
+	margin: 1.5vh;
 
 	color: white;
-	font-family: 'Blender Pro Book', sans-serif;
-	font-size: 1.25vh;
-	font-weight: 100;
+	font-family: 'Blender Pro Thin', sans-serif;
+	font-weight: 50;
+	font-size: 2vh;
+	line-height: 2vh;
 
 }
 
