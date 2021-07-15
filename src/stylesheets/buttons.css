@@ -1,5 +1,4 @@
 button.button-main {
-
 	position: relative;
 	border: solid 1px rgba(255, 255, 255, 0.3);
 	background: none;
@@ -14,11 +13,9 @@ button.button-main {
 	padding: 0;
 	transition: all 0.25s ease;
 	outline: none;
-
 }
 
 button.button-main:before {
-
 	content: "";
 	position: absolute;
 	top: 0;
@@ -28,11 +25,9 @@ button.button-main:before {
 	transform: translateY(-1px);
 	background: rgba(255, 255, 255, 1);
 	transition: all 0.25s ease;
-
 }
 
 button.button-main:after {
-
 	content: "";
 	position: absolute;
 	bottom: 0;
@@ -42,53 +37,39 @@ button.button-main:after {
 	transform: translateY(1px);
 	background: rgba(255, 255, 255, 1);
 	transition: all 0.25s ease;
-
 }
 
 button.button-main:hover {
-
 	box-shadow: 1px 1px 8px rgba(255, 255, 255, 0.3);
 	color: rgba(255, 255, 255, 1);
 	text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
 	cursor: pointer;
-
 }
 
 button.button-main:active {
-	
 	width: 180px;
 	height: 50px;
-	
 }
 
 button.button-main:hover.button-main:before {
-
 	left: -1px;
 	width: 20px;
-
 }
 
 button.button-main:hover.button-main:after {
-
 	right: -1px;
 	width: 20px;
-
 }
 
 button.button-main:hover span.span-main-line:before {
-
 	bottom: -1px;
-
 }
 
 button.button-main:hover span.span-main-line:after {
-
 	top: -1px;
-
 }
 
 span.span-main-line:before {
-
 	content: "";
 	position: absolute;
 	bottom: 30%;
@@ -98,11 +79,9 @@ span.span-main-line:before {
 	transform: translateX(1px);
 	background: rgba(255, 255, 255, 1);
 	transition: all 0.25s ease;
-
 }
 
 span.span-main-line:after {
-
 	content: "";
 	position: absolute;
 	top: 30%;
@@ -112,11 +91,9 @@ span.span-main-line:after {
 	transform: translateX(-1px);
 	background: rgba(255, 255, 255, 1);
 	transition: all 0.25s ease;
-
 }
 
 button.button-main-dark {
-
 	position: relative;
 	border: solid 1px rgba(0, 0, 0, 0.3);
 	background: none;
@@ -131,11 +108,9 @@ button.button-main-dark {
 	padding: 0;
 	transition: all 0.25s ease;
 	outline: none;
-
 }
 
 button.button-main-dark:before {
-
 	content: "";
 	position: absolute;
 	top: 0;
@@ -145,11 +120,9 @@ button.button-main-dark:before {
 	transform: translateY(-1px);
 	background: rgba(0, 0, 0, 1);
 	transition: all 0.25s ease;
-
 }
 
 button.button-main-dark:after {
-
 	content: "";
 	position: absolute;
 	bottom: 0;
@@ -159,53 +132,39 @@ button.button-main-dark:after {
 	transform: translateY(1px);
 	background: rgba(0, 0, 0, 1);
 	transition: all 0.25s ease;
-
 }
 
 button.button-main-dark:hover {
-
 	box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
 	color: rgba(0, 0, 0, 1);
 	text-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
 	cursor: pointer;
-
 }
 
 button.button-main-dark:active {
-	
 	width: 180px;
 	height: 50px;
-	
 }
 
 button.button-main-dark:hover.button-main-dark:before {
-
 	left: -1px;
 	width: 20px;
-
 }
 
 button.button-main-dark:hover.button-main-dark:after {
-
 	right: -1px;
 	width: 20px;
-
 }
 
 button.button-main-dark:hover span.span-main-line-dark:before {
-
 	bottom: -1px;
-
 }
 
 button.button-main-dark:hover span.span-main-line-dark:after {
-
 	top: -1px;
-
 }
 
 span.span-main-line-dark:before {
-
 	content: "";
 	position: absolute;
 	bottom: 30%;
@@ -215,11 +174,9 @@ span.span-main-line-dark:before {
 	transform: translateX(1px);
 	background: rgba(0, 0, 0, 1);
 	transition: all 0.25s ease;
-
 }
 
 span.span-main-line-dark:after {
-
 	content: "";
 	position: absolute;
 	top: 30%;
@@ -229,11 +186,9 @@ span.span-main-line-dark:after {
 	transform: translateX(-1px);
 	background: rgba(0, 0, 0, 1);
 	transition: all 0.25s ease;
-
 }
 
 button#button-join-room {
-
 	width: 12.5vw;
 	height: 3.75vw;
 
@@ -243,11 +198,9 @@ button#button-join-room {
 	margin-right: 3.75vw;
 
 	font-size: 1vw;
-
 }
 
 button#button-join-room:active {
-	
 	width: 12vw;
 	height: 3.5vw;
 
@@ -255,11 +208,9 @@ button#button-join-room:active {
 	margin-bottom: 2vw;
 	margin-left: 4vw;
 	margin-right: 4vw;
-	
 }
 
 button#button-create-room {
-
 	width: 12.5vw;
 	height: 3.75vw;
 
@@ -269,11 +220,9 @@ button#button-create-room {
 	margin-right: 3.75vw;
 
 	font-size: 1vw;
-
 }
 
 button#button-join-room:active {
-	
 	width: 12vw;
 	height: 3.5vw;
 
@@ -281,5 +230,4 @@ button#button-join-room:active {
 	margin-bottom: 2vw;
 	margin-left: 4vw;
 	margin-right: 4vw;
-	
 }

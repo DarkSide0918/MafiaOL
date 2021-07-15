@@ -1,7 +1,6 @@
 /* Introduction Scene */
 
 div#introduction-scene {
-
 	width: 100vw;
 	height: 95vh;
 
@@ -10,23 +9,18 @@ div#introduction-scene {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
 }
 
 div#introduction-button-container {
-
 	height: 20vh;
 
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
 }
 
 div#title {
-
 	height: 30vh;
-
 }
 
 /* div#introduction-footer {
@@ -42,105 +36,74 @@ div#introduction-footer-spacer {
 } */
 
 p#display-warning-text {
-
 	font-size: 2vh;
 	text-align: center;
-
 }
 
 h1.title-text {
-
 	overflow: hidden;
 	white-space: nowrap;
 
 	color: white; 
 	font-size: 12.5vh;
 	font-family: 'Digital-7', monospace;
-
 }
 
 h1#title-line-1 {
-
 	animation: 1.95s title-line-1-typing steps(13);
 
 	border-right: 4px solid white;
 
 	width: 13ch;
-
-
 }
 
 h1#title-line-2 {
-
 	animation: 3.3s title-line-2-typing steps(22), 1s cursor-animation 3.3s infinite;
 
 	border-right: 4px solid white;
 
 	width: 22ch;
-
 }
 
 p#display-warning-text {
-
 	color: black;
 	font-size: 1.5vh;
 	font-family: 'Blender Pro Book', sans-serif;
-
 }
 
 @keyframes title-line-1-typing {
-
 	0% {
-
 		width: 0ch;
-
 	}
 
 	100% {
-
 		width: 13ch;
-
 	}
-
 }
 
 @keyframes title-line-2-typing {
-
 	0% {
-
 		color: white;
 
 		width: 0ch;
-
 	}
 
 	100% {
-
 		width: 22ch;
 		color: white;
-
 	}
-
 }
 
 @keyframes cursor-animation {
-
 	0% {
-
 		border-right: 4px solid white;
-
 	}
 
 	25% {
-
 		border-right: 4px solid white;
-
 	}
 
 	100% {
-
 		border-right: 4px solid transparent;
-
 	}
-
 }
