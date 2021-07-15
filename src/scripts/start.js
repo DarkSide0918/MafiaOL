@@ -11,12 +11,14 @@ var intActionPointCapacity = 10;
 var intActionPointsRemaining = 0;
 var intActionPhase = 0;
 var strSelectedChr = "";
+var strSelectedChrName = "";
 var strSelectedAction = "";
 var strSelectedTarget = "";
 
 // Cached Local Misc
 var boolIsHost = false;
 var myRoomName = "";
+var strGameMode = "FFA";
 
 function reset() {
 

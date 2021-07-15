@@ -182,7 +182,9 @@ function funcClickCharacter(chrId, chrRole) {
 
 }
 
-function funcSelectChr(role) {
+function funcSelectChr(role, name) {
+
+	strSelectedChrName = name;
 
 	switch (role) {
 
@@ -231,6 +233,8 @@ function funcSelectChr(role) {
 			funcManageSelectButton();
 			document.getElementById("button-select-message").hidden = false;
 			document.getElementById("button-select-suicide").hidden = false;
+			document.getElementById("input-messenger-field").hidden = false;
+			document.getElementById("input-messenger-submit").hidden = false;
 
 			intActionPhase = 2;
 
@@ -256,9 +260,9 @@ function funcManageSelectButton() {
 	document.getElementById("button-select-hunt").hidden = true;
 	document.getElementById("button-select-bodyguard").hidden = true;
 	document.getElementById("button-select-tend").hidden = true;
-	document.getElementById("button-select-message").hidden = true;
 	document.getElementById("button-select-investigate").hidden = true;
 	document.getElementById("button-select-suicide").hidden = true;
+	document.getElementById("input-messenger-field").hidden = true;
 
 }
 
@@ -336,11 +340,11 @@ function funcSelectTarget(targetId) {
 
 	// Act
 
-	if (true/*intActionsRemaining >= 1*/) {
+	switch (strSelectedAction) {
 
-		switch (strSelectedAction) {
+		case "assassinate":
 
-			case "assassinate":
+			if (intActionPointsRemaining >= 5 && strGameMode == "FFA" || intActionPointsRemaining >= 4 && strGameMode == "Team") {
 
 				switch (strStatus) {
 
@@ -352,7 +356,7 @@ function funcSelectTarget(targetId) {
 
 						});
 
-						funcActionFeedback(true);
+						funcActionFeedback(0);
 
 					break;
 
@@ -364,7 +368,7 @@ function funcSelectTarget(targetId) {
 
 						});
 
-						funcActionFeedback(true);
+						funcActionFeedback(0);
 
 					break;
 
@@ -376,7 +380,7 @@ function funcSelectTarget(targetId) {
 
 						});
 
-						funcActionFeedback(true);
+						funcActionFeedback(0);
 
 					break;
 
@@ -388,21 +392,34 @@ function funcSelectTarget(targetId) {
 
 						});
 
-						funcActionFeedback(true);
+						funcActionFeedback(0);
 
 					break;
 
 					default: 
 
-						funcActionFeedback(false);
+						funcActionFeedback(0);
 
 					break;
 
 				}
 
-			break;
+				if (strGameMode == "FFA") 
+					intActionPointsRemaining -= 4;
+				else
+					intActionPointsRemaining -= 3;
 
-			case "hunt":
+			} else {
+
+				funcActionFeedback(1);
+
+			}
+
+		break;
+
+		case "hunt":
+
+			if (intActionPointsRemaining >= 4 && strGameMode == "FFA" || intActionPointsRemaining >= 3 && strGameMode == "Team") {
 
 				switch (strStatus) {
 
@@ -414,7 +431,7 @@ function funcSelectTarget(targetId) {
 
 						});
 
-						funcActionFeedback(true);
+						funcActionFeedback(0);
 
 					break;
 
@@ -426,21 +443,34 @@ function funcSelectTarget(targetId) {
 
 						});
 
-						funcActionFeedback(true);
+						funcActionFeedback(0);
 
 					break;
 
 					default: 
 
-						funcActionFeedback(false);
+						funcActionFeedback(0);
 
 					break;
 
 				}
 
-			break;
+				if (strGameMode == "FFA") 
+					intActionPointsRemaining -= 4;
+				else
+					intActionPointsRemaining -= 3;
 
-			case "bodyguard":
+			} else {
+
+				funcActionFeedback(1);
+
+			}
+
+		break;
+
+		case "bodyguard":
+
+			if (intActionPointsRemaining >= 2) {
 
 				switch (strStatus) {
 
@@ -452,7 +482,8 @@ function funcSelectTarget(targetId) {
 
 						});
 
-						funcActionFeedback(true);
+						intActionPointsRemaining -= 2;
+						funcActionFeedback(0);
 
 					break;
 
@@ -464,7 +495,8 @@ function funcSelectTarget(targetId) {
 
 						});
 
-						funcActionFeedback(true);
+						intActionPointsRemaining -= 2;
+						funcActionFeedback(0);
 
 					break;
 
@@ -476,21 +508,31 @@ function funcSelectTarget(targetId) {
 
 						});
 
-						funcActionFeedback(true);
+						intActionPointsRemaining -= 2;
+						funcActionFeedback(0);
 
 					break;
 
 					default: 
 
-						funcActionFeedback(false);
+						intActionPointsRemaining -= 2;
+						funcActionFeedback(0);
 
 					break;
 
 				}
 
-			break;
+			} else {
 
-			case "tend":
+				funcActionFeedback(1);
+
+			}
+
+		break;
+
+		case "tend":
+
+			if (intActionPointsRemaining >= 5) {
 
 				switch (strStatus) {
 
@@ -502,48 +544,138 @@ function funcSelectTarget(targetId) {
 
 						});
 
-						funcActionFeedback(true);
+						intActionPointsRemaining -= 5;
+						funcActionFeedback(0);
 
 					break;
 
 					default: 
 
-						funcActionFeedback(false);
+						intActionPointsRemaining -= 5;
+						funcActionFeedback(0);
 
 					break;
 
 				}
 
-			break;
+			} else {
 
-			case "message":
+				funcActionFeedback(1);
 
-				strSelectedAction = "message";
+			}
 
-			break;
+		break;
 
-			case "investigate":
+		case "message":
 
-				strSelectedAction = "investigate";
+			if (intActionPointsRemaining >= 1) {
 
-			break;
+				firebase.database().ref("rooms/" + myRoomName + "/messages").update({
 
-		}
+					// "t" = type, "s" = sender, "r" = receiver, "m" = message
+					// Types: "s" = secret, "p" = public
+
+					t: "s",
+					s: strSelectedChrName,
+					r: targetId, //if class list contans owned-chr then display message
+					m: document.getElementById("input-messenger-field").value,
+
+
+				});
+
+				intActionPointsRemaining -= 1;
+				funcActionFeedback(0);
+
+			} else {
+
+				funcActionFeedback(1);
+
+			}
+
+		break;
+
+		case "investigate":
+
+			if (intActionPointsRemaining >= 2) {
+
+				firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).once("value", function(snapshot) {
+
+					switch (snapshot.child("r").val()) {
+
+						case "an": 
+
+							document.getElementById(targetId).innerHTML += "<p> Assassin owned by " + snapshot.child("owner").val() + "</p>";
+
+						break;
+
+						case "hr": 
+
+							document.getElementById(targetId).innerHTML += "<p> Hunter owned by " + snapshot.child("owner").val() + "</p>";
+
+						break;
+
+						case "bd": 
+
+							document.getElementById(targetId).innerHTML += "<p> Bodyguard owned by " + snapshot.child("owner").val() + "</p>";
+
+						break;
+
+						case "tr": 
+
+							document.getElementById(targetId).innerHTML += "<p> Tender owned by " + snapshot.child("owner").val() + "</p>";
+
+						break;
+
+						case "mr": 
+
+							document.getElementById(targetId).innerHTML += "<p> Messenger owned by " + snapshot.child("owner").val() + "</p>";
+
+						break;
+
+						case "ir": 
+
+							document.getElementById(targetId).innerHTML += "<p> Investigator owned by " + snapshot.child("owner").val() + "</p>";
+
+						break;
+
+					}
+
+				});
+
+				intActionPointsRemaining -= 2;
+				funcActionFeedback(0);
+				
+			} else {
+
+				funcActionFeedback(1);
+
+			}
+
+		break;
 
 	}
 
 }
 
-function funcActionFeedback(status) {
+// Type 0: OK
+// Type 1: Not engough action points
+// Type 2: Invalid action
 
-	if (status) {
+function funcActionFeedback(type) {
 
-		intActionsRemaining --;
-		intActionPhase = 0;
+	switch (type) {
 
-	} else {
+		case 0: 
 
-		alert
+			intActionPhase = 0;
+
+		break;
+
+		case 1: 
+
+			alert("you don't have enough action points");
+
+		break;
 
 	}
 
