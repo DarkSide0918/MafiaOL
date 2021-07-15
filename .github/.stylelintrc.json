@@ -1,5 +1,5 @@
 {
     "rules": {
-        "indentation": [2, "tab"]
+        "indentation": [4, "tab"]
     }
 }
