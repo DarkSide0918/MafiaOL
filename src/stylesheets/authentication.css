@@ -1,0 +1,62 @@
+div#authentication-scene {
+    width: 100vw;
+    height: 95vh;
+
+	background-image: url(../../assets/images/home.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+div#authentication-spacer {
+    width: 100vw;
+    height: 75vh;
+}
+
+div#authentication-container {
+    width: 100%;
+    height: 20vh;
+}
+
+div#authentication-fields-container {
+    width: 100%;
+    height: 10vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+div#authentication-buttons-container {
+    width: 100%;
+    height: 10vh;
+
+    text-align: center;
+}
+
+input#username-input {
+    margin: 2.5vh;
+    background-color: transparent;
+    border-top: none;
+    border-bottom: 1px solid white;
+    border-left: none;
+    border-right: none;
+    color: white;
+    font-family: 'Blender Pro Thin', monospace;
+    font-size: 2.5vh;
+    line-height: 2.5vh;
+    outline: none;
+}
+
+input#password-input {
+    margin: 2.5vh;
+    background-color: transparent;
+    border-top: none;
+    border-bottom: 1px solid white;
+    border-left: none;
+    border-right: none;
+    color: white;
+    font-family: 'Blender Pro Thin', monospace;
+    font-size: 2.5vh;
+    line-height: 2.5vh;
+    outline: none;
+}

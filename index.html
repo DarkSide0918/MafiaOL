@@ -27,6 +27,7 @@
 		<link rel="stylesheet" href="src/stylesheets/buttons.css">
 		<link rel="stylesheet" href="src/stylesheets/room-list.css">
 		<link rel="stylesheet" href="src/stylesheets/introduction.css">
+		<link rel="stylesheet" href="src/stylesheets/authentication.css">
 
 		<link rel="fonts" href="assets/fonts/BlenderPro-Heavy.otf">
 
@@ -129,17 +130,30 @@
 
 		<div id="authentication-scene" hidden>
 
-			<p> Please Identify Yourself </p>
+			<div id="authentication-spacer"></div>
 
-			<div id="authentication-form-container">
+			<div id="authentication-container">
 
-				<form onsubmit="return authentication()" autocomplete="off">
+				<div id="authentication-form-container">
 
-					<input id="username-input" placeholder="Username"> </input>
-					<input id="password-input" placeholder="Password"> </input>
-					<input id="account-form-submit-button" type="submit" value="Join"> </input>
+					<form onsubmit="return authentication()" autocomplete="off">
 
-				</form>
+						<div id="authentication-fields-container">
+
+							<input id="username-input" placeholder="Username" />
+							<input id="password-input" placeholder="Password" type="password" />
+
+						</div>
+
+						<div id="authentication-buttons-container">
+
+							<input class="input-main" id="account-form-submit-button" type="submit" value="Join_" />
+
+						</div>
+
+					</form>
+
+				</div>
 
 			</div>
 
@@ -151,12 +165,12 @@
 
 				<div id="home-left-container">
 
-					<button class="button-main-dark" id="button-join-room" onclick="switchScenes('room-list'); refreshRoomList()">
-						<span class="span-main-line-dark"></span>
+					<button class="button-main" id="button-join-room" onclick="switchScenes('room-list'); refreshRoomList()">
+						<span class="span-main-line"></span>
 						Join Room_
 					</button>
-					<button class="button-main-dark" id="button-create-room" onclick="switchScenes('create-room')">
-						<span class="span-main-line-dark"></span>
+					<button class="button-main" id="button-create-room" onclick="switchScenes('create-room')">
+						<span class="span-main-line"></span>
 						Create Room_
 					</button>
 
