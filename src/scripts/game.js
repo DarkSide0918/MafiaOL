@@ -1,5 +1,7 @@
 // Server Synchronization
 
+// Some Changes
+
 function syncGame() {
 
 	firebase.database().ref("rooms/" + myRoomName + "/characters").on("value", function (snapshot) {
