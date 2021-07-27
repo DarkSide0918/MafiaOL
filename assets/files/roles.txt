@@ -9,7 +9,7 @@ Character			Description						Cost (FFA/Team)		Abbreviation
 [Bodyguard]			Bodyguards a character			2pt					BD
 [Tender]			Tends an injured character		5pt					TR
 [Messenger]			Sends a private message			1pt					MR
-[Investigator]		Investigates one's identity		2pt					IR
+[Investigator]		Investigates one's identity		3pt					IR
 
 ---------------------------------------------------------------------------------------------------------
 Actions that don't require characters: 
