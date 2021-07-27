@@ -17,14 +17,14 @@ function syncGame() {
 
 				if (snapshot.child(i).child("o").val() == userName) {
 
-					ownedCharacter += "<button class='owned-chr card owned-hr' id='" + i + "' onclick='funcClickCharacter(" + i + ", `" + snapshot.child(i).child("r").val() + "`)'>";
+					ownedCharacter += "<button class='owned-chr card owned-hr' id='" + i + "' onclick='funcClickCharacter(" + i + ", `" + snapshot.child(i).child("r").val() + "`, `" + snapshot.child(i).child("n").val() + "`)'>";
 					
-					ownedCharacter += snapshot.child(i).child("n").val() + " <br> " + snapshot.child(i).child("d").val() + " <br> " + "Owned " + snapshot.child("r").val();
+					ownedCharacter += snapshot.child(i).child("n").val() + " <br> " + snapshot.child(i).child("d").val() + " <br> " + "Owned " + snapshot.child(i).child("r").val();
 					ownedCharacter += "</button>";
 
 				} else {
 
-					otherCharacter += "<button class='card other-chr' id='" + i + "' onclick='funcClickCharacter(" + i + ", " + snapshot.child("r").val() + ")'>";
+					otherCharacter += "<button class='card other-chr' id='" + i + "' onclick='funcClickCharacter(" + i + ", `" + snapshot.child(i).child("r").val() + "`)'>";
 					otherCharacter += snapshot.child(i).child("n").val() + " <br> " + snapshot.child(i).child("d").val();
 					otherCharacter += "</button>";
 
@@ -41,8 +41,16 @@ function syncGame() {
 
 		} else {
 
-			firebase.database().ref("rooms/" + myRoomName + "/characters").off();
+			var i = 0;
+			var counts = 0;
 
+			firebase.database().ref("rooms/" + myRoomName + "/counts").on("value", function (snapshot) {
+
+				counts = snapshot.val()
+
+			});
+
+			firebase.database().ref("rooms/" + myRoomName + "/characters").off();
 			firebase.database().ref("rooms/" + myRoomName + "/characters").on("child_added", function(snapshot) {
 
 				var ownedCharacter = "";
@@ -50,13 +58,13 @@ function syncGame() {
 
 				if (snapshot.child("o").val() == userName) {
 					
-					ownedCharacter += "<button class='owned-chr card owned-hr' id='" + snapshot.key + "' onclick='funcClickCharacter(" + snapshot.key + ", " + snapshot.child("r").val() + ")'>";
-					ownedCharacter += snapshot.child("n").val() + " <br> " + snapshot.child("d").val() + " <br> " + "Owned " + snapshot.child(i).child("role").val();
+					ownedCharacter += "<button class='owned-chr card owned-hr' id='" + snapshot.key + "' onclick='funcClickCharacter(" + snapshot.key + ", `" + snapshot.child("r").val() + "`, `" + snapshot.child("n").val() + "`)'>";
+					ownedCharacter += snapshot.child("n").val() + " <br> " + snapshot.child("d").val() + " <br> " + "Owned " + snapshot.child("r").val();
 					ownedCharacter += "</button>";
 
 				} else {
 
-					otherCharacter += "<button class='card other-chr' id='" + snapshot.key + "' onclick='funcClickCharacter(" + snapshot.key + ", " + snapshot.child("r").val() + ")'>";
+					otherCharacter += "<button class='card other-chr' id='" + snapshot.key + "' onclick='funcClickCharacter(" + snapshot.key + ", `" + snapshot.child("r").val() + "`)'>";
 					otherCharacter += snapshot.child("n").val() + " <br> " + snapshot.child("d").val();
 					otherCharacter += "</button>";
 
@@ -65,15 +73,34 @@ function syncGame() {
 				document.getElementById("game-scene").innerHTML += ownedCharacter;
 				document.getElementById("game-scene").innerHTML += otherCharacter;
 
-				funcClickCharacter(0, 0); 
+				i ++;
+
+				if (i == counts) {
+
+					funcClickCharacter(0, 0); 
+					firebase.database().ref("rooms/" + myRoomName + "/counts").off()
+
+				}
 
 			});
 
 		}
 
+		updateStats();
+
 	});
 
+	firebase.database().ref("game/characters").on("child_removed", function (snapshot) {
+
+        document.getElementById(snapshot.key).remove();
+
+		updateStats();
+    
+    });
+
 	firebase.database().ref("rooms/" + myRoomName + "/round").on("value", function (snapshot) {
+
+		intRound = snapshot.val();
 
 		if (snapshot.val() <= intActionPointCapacity) {
 
@@ -85,6 +112,8 @@ function syncGame() {
 
 		}
 
+		updateStats();
+
 	});
 
 	// Check if display host-exclusive buttons
@@ -92,10 +121,14 @@ function syncGame() {
 	if (boolIsHost) {
 
 		document.getElementById("input-board-file-upload").hidden = false;
+		document.getElementById("button-end-round").hidden = false;
+		document.getElementById("button-abort").hidden = false;
 
 	} else {
 
 		document.getElementById("input-board-file-upload").hidden = true;
+		document.getElementById("button-end-round").hidden = true;
+		document.getElementById("button-abort").hidden = true;
 
 	}
 
@@ -113,7 +146,7 @@ function funcDetachSyncGameListeners() {
 
 }
 
-function funcClickCharacter(chrId, chrRole) {
+function funcClickCharacter(chrId, chrRole, chrName) {
 
 	switch (intActionPhase) {
 
@@ -130,7 +163,11 @@ function funcClickCharacter(chrId, chrRole) {
 
 			for (var i = 0; i < arrOwnedCharacters.length; i++) {
 
-				arrOwnedCharacters[i].disabled = false;
+				if (!arrOwnedCharacters[i].classList.contains("injured") && !arrOwnedCharacters[i].classList.contains("killed") && !arrOwnedCharacters[i].classList.contains("used")) {
+
+					arrOwnedCharacters[i].disabled = false;
+
+				}
 
 			}
 
@@ -140,7 +177,7 @@ function funcClickCharacter(chrId, chrRole) {
 
 		case 1:
 
-			funcSelectChr(chrRole);
+			funcSelectChr(chrRole, chrName);
 
 			var arrOwnedCharacters = document.getElementsByClassName("owned-chr");
 
@@ -166,8 +203,6 @@ function funcClickCharacter(chrId, chrRole) {
 
 		case 3:
 
-			console.log("chrId is " + chrId);
-
 			funcManageSelectButton();
 			funcSelectTarget(chrId);
 
@@ -178,7 +213,7 @@ function funcClickCharacter(chrId, chrRole) {
 
 	}
 
-	console.log(chrId, chrRole, intActionPhase);
+	updateStats();
 
 }
 
@@ -231,10 +266,9 @@ function funcSelectChr(role, name) {
 		case "mr":
 
 			funcManageSelectButton();
-			document.getElementById("button-select-message").hidden = false;
 			document.getElementById("button-select-suicide").hidden = false;
 			document.getElementById("input-messenger-field").hidden = false;
-			document.getElementById("input-messenger-submit").hidden = false;
+			document.getElementById("button-messenger-submit").hidden = false;
 
 			intActionPhase = 2;
 
@@ -336,324 +370,332 @@ function funcSelectTarget(targetId) {
 
 		strStatus = snapshot.val();
 
-	});
+		console.log(strStatus)
 
-	// Act
+		// Act
 
-	switch (strSelectedAction) {
+		switch (strSelectedAction) {
 
-		case "assassinate":
+			case "assassinate":
 
-			if (intActionPointsRemaining >= 5 && strGameMode == "FFA" || intActionPointsRemaining >= 4 && strGameMode == "Team") {
+				console.log("Step 1");
 
-				switch (strStatus) {
+				if (intActionPointsRemaining >= 5 && strGameMode == "FFA" || intActionPointsRemaining >= 4 && strGameMode == "Team") {
 
-					case "n":
+					console.log("Step 2");
+					console.log(strStatus);
+					console.log(targetId);
 
-						firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
+					switch (strStatus) {
 
-							s: "sa"
+						case "n":
 
-						});
+							firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
 
-						funcActionFeedback(0);
+								s: "sa"
 
-					break;
+							});
 
-					case "si":
-
-						firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
-
-							s: "sa"
-
-						});
-
-						funcActionFeedback(0);
-
-					break;
-
-					case "ai":
-
-						firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
-
-							s: "sa"
-
-						});
-
-						funcActionFeedback(0);
-
-					break;
-
-					case "b":
-
-						firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
-
-							s: "aa"
-
-						});
-
-						funcActionFeedback(0);
-
-					break;
-
-					default: 
-
-						funcActionFeedback(0);
-
-					break;
-
-				}
-
-				if (strGameMode == "FFA") 
-					intActionPointsRemaining -= 4;
-				else
-					intActionPointsRemaining -= 3;
-
-			} else {
-
-				funcActionFeedback(1);
-
-			}
-
-		break;
-
-		case "hunt":
-
-			if (intActionPointsRemaining >= 4 && strGameMode == "FFA" || intActionPointsRemaining >= 3 && strGameMode == "Team") {
-
-				switch (strStatus) {
-
-					case "n":
-
-						firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
-
-							s: "si"
-
-						});
-
-						funcActionFeedback(0);
-
-					break;
-
-					case "b":
-
-						firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
-
-							s: "ai"
-
-						});
-
-						funcActionFeedback(0);
-
-					break;
-
-					default: 
-
-						funcActionFeedback(0);
-
-					break;
-
-				}
-
-				if (strGameMode == "FFA") 
-					intActionPointsRemaining -= 4;
-				else
-					intActionPointsRemaining -= 3;
-
-			} else {
-
-				funcActionFeedback(1);
-
-			}
-
-		break;
-
-		case "bodyguard":
-
-			if (intActionPointsRemaining >= 2) {
-
-				switch (strStatus) {
-
-					case "n":
-
-						firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
-
-							s: "b"
-
-						});
-
-						intActionPointsRemaining -= 2;
-						funcActionFeedback(0);
-
-					break;
-
-					case "sa":
-
-						firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
-
-							s: "aa"
-
-						});
-
-						intActionPointsRemaining -= 2;
-						funcActionFeedback(0);
-
-					break;
-
-					case "si":
-
-						firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
-
-							s: "ai"
-
-						});
-
-						intActionPointsRemaining -= 2;
-						funcActionFeedback(0);
-
-					break;
-
-					default: 
-
-						intActionPointsRemaining -= 2;
-						funcActionFeedback(0);
-
-					break;
-
-				}
-
-			} else {
-
-				funcActionFeedback(1);
-
-			}
-
-		break;
-
-		case "tend":
-
-			if (intActionPointsRemaining >= 5) {
-
-				switch (strStatus) {
-
-					case "i":
-
-						firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
-
-							s: "t"
-
-						});
-
-						intActionPointsRemaining -= 5;
-						funcActionFeedback(0);
-
-					break;
-
-					default: 
-
-						intActionPointsRemaining -= 5;
-						funcActionFeedback(0);
-
-					break;
-
-				}
-
-			} else {
-
-				funcActionFeedback(1);
-
-			}
-
-		break;
-
-		case "message":
-
-			if (intActionPointsRemaining >= 1) {
-
-				firebase.database().ref("rooms/" + myRoomName + "/messages").update({
-
-					// "t" = type, "s" = sender, "r" = receiver, "m" = message
-					// Types: "s" = secret, "p" = public
-
-					t: "s",
-					s: strSelectedChrName,
-					r: targetId, //if class list contans owned-chr then display message
-					m: document.getElementById("input-messenger-field").value,
-
-
-				});
-
-				intActionPointsRemaining -= 1;
-				funcActionFeedback(0);
-
-			} else {
-
-				funcActionFeedback(1);
-
-			}
-
-		break;
-
-		case "investigate":
-
-			if (intActionPointsRemaining >= 2) {
-
-				firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).once("value", function(snapshot) {
-
-					switch (snapshot.child("r").val()) {
-
-						case "an": 
-
-							document.getElementById(targetId).innerHTML += "<p> Assassin owned by " + snapshot.child("owner").val() + "</p>";
+							funcActionFeedback(0);
 
 						break;
 
-						case "hr": 
+						case "si":
 
-							document.getElementById(targetId).innerHTML += "<p> Hunter owned by " + snapshot.child("owner").val() + "</p>";
+							firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
 
-						break;
+								s: "sa"
 
-						case "bd": 
+							});
 
-							document.getElementById(targetId).innerHTML += "<p> Bodyguard owned by " + snapshot.child("owner").val() + "</p>";
-
-						break;
-
-						case "tr": 
-
-							document.getElementById(targetId).innerHTML += "<p> Tender owned by " + snapshot.child("owner").val() + "</p>";
+							funcActionFeedback(0);
 
 						break;
 
-						case "mr": 
+						case "ai":
 
-							document.getElementById(targetId).innerHTML += "<p> Messenger owned by " + snapshot.child("owner").val() + "</p>";
+							firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
+
+								s: "sa"
+
+							});
+
+							funcActionFeedback(0);
 
 						break;
 
-						case "ir": 
+						case "b":
 
-							document.getElementById(targetId).innerHTML += "<p> Investigator owned by " + snapshot.child("owner").val() + "</p>";
+							firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
+
+								s: "aa"
+
+							});
+
+							funcActionFeedback(0);
+
+						break;
+
+						default: 
+
+							funcActionFeedback(0);
 
 						break;
 
 					}
 
-				});
+					if (strGameMode == "FFA") 
+						intActionPointsRemaining -= 5;
+					else
+						intActionPointsRemaining -= 4;
 
-				intActionPointsRemaining -= 2;
-				funcActionFeedback(0);
-				
-			} else {
+				} else {
 
-				funcActionFeedback(1);
+					funcActionFeedback(1);
 
-			}
+				}
 
-		break;
+			break;
 
-	}
+			case "hunt":
+
+				if (intActionPointsRemaining >= 4 && strGameMode == "FFA" || intActionPointsRemaining >= 3 && strGameMode == "Team") {
+
+					switch (strStatus) {
+
+						case "n":
+
+							firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
+
+								s: "si"
+
+							});
+
+							funcActionFeedback(0);
+
+						break;
+
+						case "b":
+
+							firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
+
+								s: "ai"
+
+							});
+
+							funcActionFeedback(0);
+
+						break;
+
+						default: 
+
+							funcActionFeedback(0);
+
+						break;
+
+					}
+
+					if (strGameMode == "FFA") 
+						intActionPointsRemaining -= 4;
+					else
+						intActionPointsRemaining -= 3;
+
+				} else {
+
+					funcActionFeedback(1);
+
+				}
+
+			break;
+
+			case "bodyguard":
+
+				if (intActionPointsRemaining >= 2) {
+
+					switch (strStatus) {
+
+						case "n":
+
+							firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
+
+								s: "b"
+
+							});
+
+							intActionPointsRemaining -= 2;
+							funcActionFeedback(0);
+
+						break;
+
+						case "sa":
+
+							firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
+
+								s: "aa"
+
+							});
+
+							intActionPointsRemaining -= 2;
+							funcActionFeedback(0);
+
+						break;
+
+						case "si":
+
+							firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
+
+								s: "ai"
+
+							});
+
+							intActionPointsRemaining -= 2;
+							funcActionFeedback(0);
+
+						break;
+
+						default: 
+
+							intActionPointsRemaining -= 2;
+							funcActionFeedback(0);
+
+						break;
+
+					}
+
+				} else {
+
+					funcActionFeedback(1);
+
+				}
+
+			break;
+
+			case "tend":
+
+				if (intActionPointsRemaining >= 5) {
+
+					switch (strStatus) {
+
+						case "i":
+
+							firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).update({
+
+								s: "t"
+
+							});
+
+							intActionPointsRemaining -= 5;
+							funcActionFeedback(0);
+
+						break;
+
+						default: 
+
+							intActionPointsRemaining -= 5;
+							funcActionFeedback(0);
+
+						break;
+
+					}
+
+				} else {
+
+					funcActionFeedback(1);
+
+				}
+
+			break;
+
+			case "message":
+
+				if (intActionPointsRemaining >= 1) {
+
+					firebase.database().ref("rooms/" + myRoomName + "/messages").push().set({
+
+						// "t" = type, "s" = sender, "r" = receiver, "m" = message
+						// Types: "s" = secret, "p" = public
+
+						"t": "s",
+						"s": strSelectedChrName,
+						"r": targetId, //if class list contans owned-chr then display message
+						"m": document.getElementById("input-messenger-field").value,
+
+
+					});
+
+					intActionPointsRemaining -= 1;
+					funcActionFeedback(0);
+
+				} else {
+
+					funcActionFeedback(1);
+
+				}
+
+			break;
+
+			case "investigate":
+
+				if (intActionPointsRemaining >= 3) {
+
+					firebase.database().ref("rooms/" + myRoomName + "/characters/" + targetId).once("value", function(snapshot) {
+
+						switch (snapshot.child("r").val()) {
+
+							case "an": 
+
+								document.getElementById(targetId).innerHTML += "<p class='p-static-text'> Assassin owned by " + snapshot.child("owner").val() + "</p>";
+
+							break;
+
+							case "hr": 
+
+								document.getElementById(targetId).innerHTML += "<p class='p-static-text'> Hunter owned by " + snapshot.child("owner").val() + "</p>";
+
+							break;
+
+							case "bd": 
+
+								document.getElementById(targetId).innerHTML += "<p class='p-static-text'> Bodyguard owned by " + snapshot.child("owner").val() + "</p>";
+
+							break;
+
+							case "tr": 
+
+								document.getElementById(targetId).innerHTML += "<p class='p-static-text'> Tender owned by " + snapshot.child("owner").val() + "</p>";
+
+							break;
+
+							case "mr": 
+
+								document.getElementById(targetId).innerHTML += "<p class='p-static-text'> Messenger owned by " + snapshot.child("owner").val() + "</p>";
+
+							break;
+
+							case "ir": 
+
+								document.getElementById(targetId).innerHTML += "<p class='p-static-text'> Investigator owned by " + snapshot.child("owner").val() + "</p>";
+
+							break;
+
+						}
+
+					});
+
+					intActionPointsRemaining -= 3;
+					funcActionFeedback(0);
+					
+				} else {
+
+					funcActionFeedback(1);
+
+				}
+
+			break;
+
+		}
+
+	});
 
 }
 
@@ -678,5 +720,131 @@ function funcActionFeedback(type) {
 		break;
 
 	}
+
+}
+
+function updateStats() {
+
+	document.getElementById("p-display-action-points").innerHTML = "Action Points: " + intActionPointsRemaining;
+	document.getElementById("p-display-round").innerHTML = "Round: " + intRound;
+
+}
+
+function funcUpdateCharacterStatus() {
+
+	firebase.database().ref("rooms/" + myRoomName + "/characters").once("value", function (snapshot) {
+
+		var characterKeys = Object.keys(snapshot.val());
+
+		for (var i = 0; i < characterKeys.length; i++) {
+
+			var ownedCharacter = "";
+			var otherCharacter = "";
+
+			switch (snapshot.child(i).child("s").val()) {
+
+				case "i":
+
+					if (snapshot.child(i).child("o").val() == userName) {
+
+						ownedCharacter += "<button class='owned-chr card owned-hr' id='" + i + "' onclick='funcClickCharacter(" + i + ", `" + snapshot.child(i).child("r").val() + "`, `" + snapshot.child(i).child("n").val() + "`)'>";
+						ownedCharacter += "Injured <br> " + snapshot.child(i).child("n").val() + " <br> " + snapshot.child(i).child("d").val() + " <br> " + "Owned " + snapshot.child(i).child("r").val();
+						ownedCharacter += "</button>";
+
+						document.getElementById(i).innerHTML = ownedCharacter;
+	
+					} else {
+	
+						otherCharacter += "<button class='card other-chr' id='" + i + "' onclick='funcClickCharacter(" + i + ", `" + snapshot.child(i).child("r").val() + "`)'>";
+						otherCharacter += "Injured <br> " + snapshot.child(i).child("n").val() + " <br> " + snapshot.child(i).child("d").val();
+						otherCharacter += "</button>";
+
+						document.getElementById(i).innerHTML = otherCharacter;
+	
+					}
+
+					document.getElementById(i).classList.remove("killed");
+					document.getElementById(i).classList.add("injured");
+
+				break;
+
+				case "k":
+
+					if (snapshot.child(i).child("o").val() == userName) {
+
+						ownedCharacter += "<button class='owned-chr card owned-hr' id='" + i + "' onclick='funcClickCharacter(" + i + ", `" + snapshot.child(i).child("r").val() + "`, `" + snapshot.child(i).child("n").val() + "`)'>";
+						ownedCharacter += "Dead <br> " + snapshot.child(i).child("n").val() + " <br> " + snapshot.child(i).child("d").val() + " <br> " + "Owned " + snapshot.child(i).child("r").val();
+						ownedCharacter += "</button>";
+
+						document.getElementById(i).innerHTML = ownedCharacter;
+
+						if (snapshot.child(i).child("r").val() == "an" || snapshot.child(i).child("r").val() == "hr"){
+
+							switch (snapshot.child(i).child("r").val()) {
+
+								case "an": 
+
+									document.getElementById(i).classList.remove("owned-an");
+
+								break;
+
+								case "hr":
+
+									document.getElementById(i).classList.remove("owned-hr");
+
+								break;
+
+							}
+
+							if (document.getElementsByClassName("owned-an").length <= 0 && document.getElementsByClassName("owned-hr").length <= 0 && !boolIsHost) {
+
+								alert("Defeat. ");
+				
+							}
+
+						}
+	
+					} else {
+	
+						otherCharacter += "<button class='card other-chr' id='" + i + "' onclick='funcClickCharacter(" + i + ", `" + snapshot.child(i).child("r").val() + "`)'>";
+						otherCharacter += "Dead <br> " + snapshot.child(i).child("n").val() + " <br> " + snapshot.child(i).child("d").val();
+						otherCharacter += "</button>";
+
+						document.getElementById(i).innerHTML = otherCharacter;
+	
+					}	
+
+					document.getElementById(i).classList.remove("injured");
+					document.getElementById(i).classList.add("killed");
+
+				break;
+
+				case "n":
+
+					if (snapshot.child(i).child("o").val() == userName) {
+
+						ownedCharacter += "<button class='owned-chr card owned-hr' id='" + i + "' onclick='funcClickCharacter(" + i + ", `" + snapshot.child(i).child("r").val() + "`, `" + snapshot.child(i).child("n").val() + "`)'>";
+						
+						ownedCharacter += snapshot.child(i).child("n").val() + " <br> " + snapshot.child(i).child("d").val() + " <br> " + "Owned " + snapshot.child(i).child("r").val();
+						ownedCharacter += "</button>";
+	
+					} else {
+	
+						otherCharacter += "<button class='card other-chr' id='" + i + "' onclick='funcClickCharacter(" + i + ", `" + snapshot.child(i).child("r").val() + "`)'>";
+						otherCharacter += snapshot.child(i).child("n").val() + " <br> " + snapshot.child(i).child("d").val();
+						otherCharacter += "</button>";
+	
+					}
+
+					document.getElementById(i).classList.remove("injured");
+					document.getElementById(i).classList.remove("killed");
+
+				break;
+
+			}
+
+		}
+
+	});
 
 }

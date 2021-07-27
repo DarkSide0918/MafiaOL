@@ -4,6 +4,12 @@ fileInput.addEventListener("change", function() {
 
 	readXlsxFile(fileInput.files[0]).then(function(data) {
 
+		firebase.database().ref("rooms/" + myRoomName).update({
+
+			"counts": data.length - 1
+
+		});
+
 		for (var i = 1; i < data.length; i++) {
 				
 			firebase.database().ref("rooms/" + myRoomName + "/characters/" + i).update({

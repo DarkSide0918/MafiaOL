@@ -16,7 +16,7 @@ function refreshRoomList() {
 
 				html += "<div class='room-item' id='room-" + roomKeys[i] + "' onclick='joinRoom(`" + roomKeys[i] + "`)'>";
 				html += "<div class='room-item-content-container'>";
-				html += "<img class='room-item-preview-image' src='assets/images/forest1.png'> </img>";
+				// html += "<img class='room-item-preview-image' src='assets/images/forest1.png'> </img>";
 				html += "<div class='room-title-and-description-container'>";
 
 				html += "<p class='room-title-text'> " + snapshot.child(roomKeys[i]).child("roomName").val() + " </p>";
@@ -24,8 +24,8 @@ function refreshRoomList() {
 
 				html += "</div>";
 
-				html += "<p class='game-mode-text'> </p>"
-				html += "<p class='player-count-text'> </p>"
+				html += "<p class='game-mode-text'> </p>";
+				html += "<p class='player-count-text'> </p>";
 
 				html += "</div>";
 				html += "</div>";
@@ -53,29 +53,45 @@ function joinRoom(roomID) {
 
 		document.getElementById("room-name").innerHTML = roomNameText;
 
-		firebase.database().ref("rooms/" + myRoomName + "/connected").update({
-
-			[userName]: false
-
-		});
-
 		if (userName == snapshot.child("host").val()) {
 
 			boolIsHost = true;
+
+			firebase.database().ref("rooms/" + myRoomName + "/connected/" + userName).update({
+
+				h: true,
+				r: false
+	
+			});
+
+			firebase.database().ref("rooms/" + myRoomName).update({
+
+				"started": false
+	
+			});
+
+		} else {
+
+			firebase.database().ref("rooms/" + myRoomName + "/connected/" + userName).update({
+
+				h: false,
+				r: false
+	
+			});
 
 		}
 
 		refreshPlayerList();
 
-	});
+		firebase.database().ref("rooms/" + roomID + "/started").on("value", (snapshot) => {
 
-	firebase.database().ref("rooms/" + roomID + "/started").on("value", (snapshot) => {
-
-		if (snapshot.val()) {
-
-			startGame();
-
-		}
+			if (snapshot.val()) {
+	
+				startGame();
+	
+			}
+	
+		});	
 
 	});
 
@@ -83,34 +99,53 @@ function joinRoom(roomID) {
 
 function createRoom() {
 
-	var roomName = document.getElementById("room-name-input").value;
-	var roomPassword = document.getElementById("room-password-input").value;
+	var roomName = document.getElementById("input-room-name").value;
+	var roomPassword = document.getElementById("input-room-password").value;
 
 	// Detect if either field is empty
 	if (roomName != "" && roomPassword != "") {
 
-		//Detect if name is already taken
-		firebase.database().ref("rooms/" + roomName).once("value").then( function (snapshot) {
+		firebase.database().ref("accounts/" + userName + "/credits").once("value", (snapshot) => {
 
-			if (snapshot.exists()) {
+			intCreditsRemaining = snapshot.val();
 
-				alert("This Room Already Exist.");
+			if (intCreditsRemaining >= 10) {
 
-				return false;
-
-			} else {
-
-				firebase.database().ref("rooms/" + roomName).set({
-
-					"roomName": roomName,
-					"roomPassword": roomPassword,
-					"host": userName,
-					"started": false
-
+				//Detect if name is already taken
+				firebase.database().ref("rooms/" + roomName).once("value").then( function (snapshot) {
+	
+					if (snapshot.exists()) {
+	
+						alert("This Room Already Exist.");
+	
+						return false;
+	
+					} else {
+	
+						firebase.database().ref("rooms/" + roomName).set({
+	
+							"roomName": roomName,
+							"roomPassword": roomPassword,
+							"host": userName,
+							"started": false,
+							"round": 0
+	
+						});
+	
+						joinRoom(roomName);
+	
+						intCreditsRemaining -= 10;
+	
+						firebase.database().ref("accounts/" + userName).update({
+	
+							"credits": intCreditsRemaining
+	
+						});
+	
+					}
+	
 				});
-
-				joinRoom(roomName);
-
+	
 			}
 
 		});
@@ -149,27 +184,61 @@ function refreshPlayerList() {
 
 		document.getElementById("room-connected-players-list").innerHTML = "";
 
-		var playerKeys = Object.keys(snapshot.val());
+		if (snapshot.val() != null) {
 
-		for (i = 0; i < playerKeys.length; i++) {
+			var playerKeys = Object.keys(snapshot.val());
 
-			var html = "";
+			var boolAllowStart = true;
 
-			html += "<div class='player-list-item'>"
+			for (i = 0; i < playerKeys.length; i++) {
 
-			if (snapshot.child(playerKeys[i]).val()) {
+				var html = "";
 
-				html += "<p> " + playerKeys[i] + " ✓ </p>"
+				html += "<div class='player-list-item'>"
 
-			} else {
+				if (snapshot.child(playerKeys[i]).child("h").val()) {
 
-				html += "<p> " + playerKeys[i] + " </p>"
+					html += "<p class='p-static-list-item'> " + playerKeys[i] + " <span class='span-tag-host'>Host</span>"
+
+					if (snapshot.child(playerKeys[i]).val() == userName) {
+
+						boolIsHost = true;
+
+					}
+
+				} else {
+
+					html += "<p class='p-static-list-item'> " + playerKeys[i]
+
+				}
+
+				if (snapshot.child(playerKeys[i]).child("r").val()) {
+
+					html += "<span class='span-tag-ready'>Ready</span> </p>"
+
+				} else {
+
+					html += "</p>"
+
+					boolAllowStart = false;
+
+				}
+
+				html += "</div>"
+
+				document.getElementById("room-connected-players-list").innerHTML += html;
+
+				if (boolAllowStart && boolIsHost) {
+
+					document.getElementById("start-game-button").hidden = false;
+
+				} else {
+
+					document.getElementById("start-game-button").hidden = true;
+
+				}
 
 			}
-
-			html += "</div>"
-
-			document.getElementById("room-connected-players-list").innerHTML += html;
 
 		}
 
@@ -179,21 +248,21 @@ function refreshPlayerList() {
 
 function ready() {
 
-	firebase.database().ref("rooms/" + myRoomName + "/connected/" + userName).once("value", (snapshot) => {
+	firebase.database().ref("rooms/" + myRoomName + "/connected/" + userName + "/r").once("value", (snapshot) => {
 
-		if (snapshot.val() == true) {
+		if (snapshot.val()) {
 
-			firebase.database().ref("rooms/" + myRoomName + "/connected").update({
+			firebase.database().ref("rooms/" + myRoomName + "/connected/" + userName).update({
 
-				[userName]: false
+				"r": false
 
 			});
 
 		} else {
 
-			firebase.database().ref("rooms/" + myRoomName + "/connected").update({
+			firebase.database().ref("rooms/" + myRoomName + "/connected/" + userName).update({
 
-				[userName]: true
+				"r": true
 
 			});
 
@@ -204,13 +273,23 @@ function ready() {
 
 }
 
-function startGame() {
+function clickStartGame() {
 
-	switchScenes("game");
+	firebase.database().ref("rooms/" + myRoomName).update({
+
+		"started": true
+
+	});
+
+}
+
+function startGame() {
 
 	// Detach Event Listeners
 	firebase.database().ref("rooms/" + myRoomName + "/connected").off();
 	firebase.database().ref("rooms/" + myRoomName + "/started").off();
+
+	switchScenes("game");
 
 	syncGame();
 

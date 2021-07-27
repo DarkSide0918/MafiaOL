@@ -45,18 +45,24 @@ function funcEndRound() {
 
         }
 
+        firebase.database().ref("rooms/" + myRoomName).update({
+
+            "round": round + 1
+
+        });
+
     });
 
-    firebase.database.ref("rooms/" + myRoomName + "round").once("value", function(snapshot) {
+    firebase.database().ref("rooms/" + myRoomName + "/round").once("value", function(snapshot) {
 
         round = snapshot.val();
 
     });
 
-    firebase.database.ref("rooms/" + myRoomName).update({
+}
 
-        round: round + 1
+function funcAbortGame() {
 
-    });
+    firebase.database.ref("rooms/" + myRoomName + "/characters").remove();
 
 }
