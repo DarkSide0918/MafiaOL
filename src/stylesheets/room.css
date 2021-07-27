@@ -1,0 +1,80 @@
+div#room-scene {
+	background-image: url(../../assets/images/home.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+div#room-info {
+	padding-top: 2.5vh;
+
+	width: 100vw;
+	height: 15vh;
+
+	text-align: center;
+}
+
+div#room-players {
+	width: 100vw;
+	height: 65vh;
+}
+
+div#room-footer-buttons {
+	width: 100vw;
+	height: 12.5vh;
+}
+
+div#room-connected-players-list {
+	margin-left: 40vw;
+	margin-right: 40vw;
+
+	width: 20vw;
+	height: 60vh;
+
+	border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+div#room-connected-players-list-top{
+	margin-left: 40vw;
+	margin-right: 40vw;
+
+	width: 20vw;
+	height: 5vh;
+
+	background-color: rgba(0, 0, 0, 0.3);
+
+	border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+div.player-list-item {
+	width: 20vw;
+	height: 5vh;
+
+	background-color: rgba(0, 0, 0, 0.3);
+
+	display: flex;
+	align-items: center;
+}
+
+p.room-title {
+	font-size: 4vh;
+	color: white;
+	font-family: 'Blender Pro Thin', sans-serif;
+}
+
+p#p-connected-static-title {
+	margin: 1.25vh;
+	
+	font-size: 2.5vh;
+	line-height: 2.5vh;
+}
+
+p.p-static-list-item {
+	margin-left: 2vw;
+	
+	font-size: 2vh;
+	line-height: 2vh;
+
+	color: white;
+	font-family: 'Blender Pro Thin', sans-serif;
+	text-align: center;
+}

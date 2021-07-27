@@ -1,0 +1,12 @@
+[CHN] - People's Republic of China
+[USA] - United States
+[CAN] - Canada
+[MEX] - Mexico
+[JPN] - Japan
+[PRK] - North Korea
+[KOR] - South Korea
+[RUS] - Russia
+[TWN-CHN] - Taiwan (People's Republic of China)
+[EUR] - Europe
+[SEA] - Southeast Asia
+[Other]

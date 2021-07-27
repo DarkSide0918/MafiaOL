@@ -1,0 +1,30 @@
+---------------------------------------------------------------------------------------------------------
+Actions that require characters: 
+---------------------------------------------------------------------------------------------------------
+
+Character			Description						Cost (FFA/Team)		Abbreviation
+
+[Assassin]			Assassinates a character		6pt/5pt				AN
+[Hunter]			Injures a character				4pt/3pt				HR
+[Bodyguard]			Bodyguards a character			2pt					BD
+[Tender]			Tends an injured character		5pt					TR
+[Messenger]			Sends a private message			1pt					MR
+[Investigator]		Investigates one's identity		3pt					IR
+
+---------------------------------------------------------------------------------------------------------
+Actions that don't require characters: 
+---------------------------------------------------------------------------------------------------------
+
+Action 				Description						Cost
+
+[Public Chat]		Sends a public message			1pt
+
+---------------------------------------------------------------------------------------------------------
+New Mechanics: 
+---------------------------------------------------------------------------------------------------------
+
+Loadout Selection - Players can select loadouts
+
+Action Points - different actions costs different amount of action points
+
+Injury - After being injured can use tenders to heal

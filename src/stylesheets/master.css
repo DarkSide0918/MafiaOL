@@ -1,0 +1,98 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+button {
+	outline: none;
+	border: none;
+
+	font-family: 'Blender Pro Heavy', sans-serif;
+}
+
+div#master-navigation-bar {
+	position: relative;
+
+	width: 100vw;
+	height: 5vh;
+
+	background-color: rgb(15,15,15);
+}
+
+div#master-title-container {
+	float: left;
+
+	width: 15vh;
+	height: 5vh;
+}
+
+div#master-subtitle-container {
+	float: left;
+
+	width: 35vh;
+	height: 5vh;
+}
+
+div#master-navigation-buttons-container {
+	float: left;
+
+	width: calc(100vw - 50vh);
+	height: 5vh;
+
+	font-size: 0;
+	text-align: right;
+}
+
+h1#master-title {
+	margin: 1vh;
+	margin-left: 2.5vh;
+
+	color: white;
+	font-family: 'Blender Pro Heavy', sans-serif;
+	font-size: 3vh;
+	line-height: 3vh;
+}
+
+h2#master-subtitle {
+	margin: 1.5vh;
+
+	color: white;
+	font-family: 'Blender Pro Thin', sans-serif;
+	font-weight: 50;
+	font-size: 2vh;
+	line-height: 2vh;
+}
+
+button.tab-button {
+	width: 7.5vw;
+	height: 4.5vh;
+
+	background-color: transparent;
+	
+	box-shadow: 0 3px 0 -2px rgb(63,63,63);;
+
+	color: white;
+	font-size: 2vh;
+	text-decoration: none;
+
+	transition: box-shadow .25s ease-out;
+}
+
+button.tab-button:hover {
+	box-shadow: 0 3px 0 -2px rgb(0,191,191);
+}
+
+button.tab-button.active {
+	box-shadow: 0 0 0 -4px rgb(0,255,255);
+}
+
+p.p-static-text {
+	color: white;
+	font-family: 'Blender Pro Thin', sans-serif;
+	text-align: center;
+}
+
+img.img-diamond-icon {
+	width: 2vh;
+	height: 2vh;
+}

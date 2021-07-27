@@ -1,0 +1,49 @@
+div#room-list-scene {
+	width: 100vw;
+	height: 95vh;
+
+	background-color: rgb(15,15,15);
+}
+
+div#room-list-navigation-bar {
+	width: 100vw;
+	height: 10vh;
+}
+
+div#room-items-container {
+	width: 100vw;
+	height: 85vh;
+}
+
+div.room-item {
+	position: relative;
+
+	margin-left: 10vw;
+	margin-right: 5vw;
+	margin-bottom: 5vh;
+
+	width: calc(90vw - 1px);
+	height: 10vh;
+
+	/* background-repeat: no-repeat;
+	background-size: 100% 50%; */
+
+	border-left: 1px solid rgba(255, 255, 255, 0.3);
+	border-top: 1px solid rgba(255, 255, 255, 0.3);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+
+	color: white;
+	font-family: 'Blender Pro Thin', sans-serif;
+
+	transition: 0.25s;
+
+	cursor: pointer;
+
+	/* clip-path: polygon(2% 0%, 100% 0, 100% 100%, 100% 100%, 0 100%, 0% 25%); */
+}
+
+div.room-item:hover {
+	margin-left: 5vw;
+
+	width: calc(95vw - 1px);
+}

@@ -1,0 +1,67 @@
+div#create-room-scene {
+    width: 100vw;
+    height: 95vh;
+
+	background-image: url(../../assets/images/home.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+div#create-room-spacer {
+    width: 100vw;
+    height: 75vh;
+}
+
+div#create-room-container {
+    width: 100%;
+    height: 20vh;
+}
+
+div#create-room-fields-container {
+    width: 100%;
+    height: 7.5vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+div#create-room-buttons-container {
+    width: 100%;
+    height: 10vh;
+
+    text-align: center;
+}
+
+input#input-room-name {
+    margin: 2.5vh;
+    background-color: transparent;
+    border-top: none;
+    border-bottom: 1px solid white;
+    border-left: none;
+    border-right: none;
+    color: white;
+    font-family: 'Blender Pro Thin', monospace;
+    font-size: 2.5vh;
+    line-height: 2.5vh;
+    outline: none;
+}
+
+input#input-room-password {
+    margin: 2.5vh;
+    background-color: transparent;
+    border-top: none;
+    border-bottom: 1px solid white;
+    border-left: none;
+    border-right: none;
+    color: white;
+    font-family: 'Blender Pro Thin', monospace;
+    font-size: 2.5vh;
+    line-height: 2.5vh;
+    outline: none;
+}
+
+p#p-cost {
+    line-height: 2vh;
+    vertical-align: top;
+}
