@@ -19,11 +19,13 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
 
 		<!-- Importing Stylesheets -->
+		<link rel="stylesheet" href="src/stylesheets/tags.css">
 		<link rel="stylesheet" href="src/stylesheets/home.css">
 		<link rel="stylesheet" href="src/stylesheets/room.css">
 		<link rel="stylesheet" href="src/stylesheets/cards.css">
 		<link rel="stylesheet" href="src/stylesheets/fonts.css">
 		<link rel="stylesheet" href="src/stylesheets/master.css">
+		<link rel="stylesheet" href="src/stylesheets/create.css">
 		<link rel="stylesheet" href="src/stylesheets/buttons.css">
 		<link rel="stylesheet" href="src/stylesheets/room-list.css">
 		<link rel="stylesheet" href="src/stylesheets/introduction.css">
@@ -59,6 +61,8 @@
 		<script src="src/scripts/room-manager.js"> </script>
 		<script src="src/scripts/room.js"> </script>
 		<script src="src/scripts/store.js"> </script>
+		<script src="src/scripts/administrator.js"> </script>
+		<script src="src/scripts/host.js"> </script>
 
 		<!-- Import Plugins -->
 		<!-- <script src="src/plugins/anticheat.js"> </script> -->
@@ -194,19 +198,30 @@
 
 		<div id="create-room-scene" hidden> 
 
-			<form onsubmit="return createRoom()" autocomplete="off">
+			<div id="create-room-spacer"></div>
 
-				<input type="text" id="room-name-input" placeholder="Room Name">
+			<div id="create-room-container">
 
-					<button id="password-toggle-button"> </button>
+				<form onsubmit="return createRoom()" autocomplete="off">
 
-				<input type="text" id="room-password-input" placeholder="Room Password">
+					<div id="create-room-fields-container">
 
-				<input type="submit" value="Create">
+						<input type="text" id="input-room-name" placeholder="Room Name">
+						<input type="text" id="input-room-password" placeholder="Room Password">
 
-				<p> Note: You will automatically join once you have created the room. </p>
+					</div>
 
-			</form>
+					<div id="create-room-buttons-container">
+
+						<input class="input-main" type="submit" value="Create_">
+
+					</div>
+
+					<p class="p-static-text" id="p-cost"> Cost: 10 <img class="img-diamond-icon" src="./assets/images/diamond-icon.png" /> </p>
+
+				</form>
+
+			</div>
 
 		</div>
 
@@ -239,16 +254,15 @@
 
 				<div id="room-connected-players-list-top">
 
-					<div id="room-connected-players-list-top-left"> 
-					</div>
 					<div id="room-connected-players-list-top-middle">
 
-						<p> Connected </p>
+						<p class="p-static-text" id="p-connected-static-title"> Connected </p>
 
 					</div>
+
 					<div id="room-connected-players-list-top-right">
 
-						<button onclick="refreshPlayerList()"> Refresh </button>
+						<!-- <button onclick="refreshPlayerList()"> Refresh </button> -->
 
 					</div>
 
@@ -263,7 +277,7 @@
 			<div id="room-footer-buttons"> 
 
 				<button id="leave-room-button" onclick="leaveRoom()"> Leave Room </button>
-				<button id="start-game-button" onclick="startGame()"> Start Game </button>
+				<button id="start-game-button" onclick="clickStartGame()" hidden> Start Game </button>
 				<button id="ready-button" onclick="ready()"> Ready </button>
 
 			</div>
@@ -282,6 +296,12 @@
 
 			<input class="navigation-buttons" type="file" id="input-board-file-upload" accept=".xlsx" hidden />
 
+			<button id="button-end-round" onclick="funcEndRound()"> End Round_ </button>
+			<button id="button-abort" onclick="funcAbortGame()"> Abort Game_ </button>
+
+			<p id="p-display-action-points"> </p>
+			<p id="p-display-round"> </p>
+
 			<div id="div-action-bar">
 
 				<button id="button-select-assassinate" onclick="funcSelectAction('assassinate')" hidden> Assassinate </button>
@@ -292,6 +312,7 @@
 				<button id="button-select-suicide" onclick="funcSelectAction('suicide')" hidden> Suicide </button>
 
 				<input id="input-messenger-field" placeholder="Enter Message..." hidden />
+				<button id="button-messenger-submit" onclick="funcSelectAction('message')" hidden> Message </button>
 
 			</div>
 
