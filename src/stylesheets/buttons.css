@@ -222,11 +222,11 @@ button#button-create-room {
 	font-size: 1vw;
 }
 
-button#button-join-room:active {
+button#button-create-room:active {
 	width: 12vw;
 	height: 3.5vw;
 
-	margin-top: 3.875vw;
+	margin-top: 2vw;
 	margin-bottom: 2vw;
 	margin-left: 4vw;
 	margin-right: 4vw;

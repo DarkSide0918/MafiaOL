@@ -18,18 +18,32 @@ div#room-items-container {
 div.room-item {
 	position: relative;
 
-	margin-left: 5vw;
+	margin-left: 10vw;
 	margin-right: 5vw;
 	margin-bottom: 5vh;
 
-	width: 90vw;
+	width: calc(90vw - 1px);
 	height: 10vh;
 
-	background-color: rgb(63, 63, 63); 
-	background-repeat: no-repeat;
-	background-size: 100% 50%;
+	/* background-repeat: no-repeat;
+	background-size: 100% 50%; */
 
-	transition: 2s;
+	border-left: 1px solid rgba(255, 255, 255, 0.3);
+	border-top: 1px solid rgba(255, 255, 255, 0.3);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
-	clip-path: polygon(2% 0%, 100% 0, 100% 75%, 98% 100%, 0 100%, 0% 25%)
+	color: white;
+	font-family: 'Blender Pro Thin', sans-serif;
+
+	transition: 0.25s;
+
+	cursor: pointer;
+
+	/* clip-path: polygon(2% 0%, 100% 0, 100% 100%, 100% 100%, 0 100%, 0% 25%); */
+}
+
+div.room-item:hover {
+	margin-left: 5vw;
+
+	width: calc(95vw - 1px);
 }
